@@ -28,11 +28,12 @@ Keep this file in the repo and **commit it** with your fixes.
 
 ## Bug 3
 
-**How to reproduce:** Filter expenses (e.g., search "Uber" or filter by category "Stay"), or view the sorted list. Click "Delete" or edit the amount on an expense row.
+**How to reproduce:** In the expense list (or after applying filters like category "Stay" or search "Uber"), click "Delete" on the 2nd expense in the list. Instead of deleting the 2nd expense you clicked, the 1st expense (or a completely different expense) is deleted. Similarly, editing the amount of an expense modifies a different expense.
 
-**What is wrong:** `ExpenseList` passed the rendered array index in the filtered/sorted list to `onDeleteAt` and `onUpdateAt`. The reducer in `store.js` then spliced `state.expenses` by that index, deleting or modifying the wrong expense from the global list. Additionally, using array indices as React keys caused stale state in `ExpenseRow`.
+**What is wrong:** `ExpenseList` passed the rendered array index in the filtered/sorted list (`index = 1`) to `onDeleteAt` and `onUpdateAt`. The reducer in `store.js` then directly spliced `state.expenses[action.index]`, which deleted the expense at index 1 of the global raw array instead of the expense the user clicked on.
 
-**What I changed:** Updated `store.js` reducer actions (`DELETE_EXPENSE` and `UPDATE_EXPENSE`) and component handlers to target expenses by their unique `id` rather than array index, synchronized the `draft` amount state, and updated React keys to `key={expense.id}`.
+**What I changed:** Updated `store.js` reducer actions (`DELETE_EXPENSE` and `UPDATE_EXPENSE`) and component handlers to target expenses by their unique `id` (`action.id` / `expense.id`) rather than array index, synchronized the `draft` amount state, and updated React keys to `key={expense.id}`.
+
 
 ---
 
