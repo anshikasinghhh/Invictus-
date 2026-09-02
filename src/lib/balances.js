@@ -6,17 +6,17 @@ export function computeBalances(members, expenses) {
 
   for (const exp of expenses) {
     const shares = sharesForExpense(exp);
-    bal[exp.paidBy] = (bal[exp.paidBy] || 0) + Number(exp.amount);
+    const payerId = Number(exp.paidBy);
+    bal[payerId] = (bal[payerId] || 0) + Number(exp.amount);
 
     for (const [id, share] of Object.entries(shares)) {
       const key = Number(id);
-      bal[key] = (bal[key] || 0) - share;
+      bal[key] = (bal[key] || 0) - Number(share);
     }
+  }
 
-    if (!(exp.paidBy in shares) && !(String(exp.paidBy) in shares)) {
-      const n = exp.splitWith.length || 1;
-      bal[exp.paidBy] -= Number(exp.amount) / n;
-    }
+  for (const id of Object.keys(bal)) {
+    bal[id] = Number(bal[id].toFixed(2));
   }
 
   return bal;
@@ -25,3 +25,4 @@ export function computeBalances(members, expenses) {
 export function totalSpent(expenses) {
   return expenses.reduce((s, e) => s + Number(e.amount), 0);
 }
+

@@ -49,21 +49,34 @@ export default function AddExpenseForm({ members, onAdd }) {
       setError("Pick at least one person to split with.");
       return;
     }
-    if (splitType === "percent" && !percentsSumTo100(percents)) {
-      setError("Percentages must add to 100.");
-      return;
+
+    const activePercents = {};
+    if (splitType === "percent") {
+      for (const id of splitWith) {
+        activePercents[id] = Number(percents[id] ?? 0);
+      }
+      if (!percentsSumTo100(activePercents)) {
+        setError("Percentages must add to 100.");
+        return;
+      }
     }
+
+    const payerId = paidBy ? Number(paidBy) : Number(members[0]?.id);
 
     onAdd({
       description: description.trim(),
       amount: n,
-      paidBy: Number(paidBy),
+      paidBy: payerId,
       splitType,
       splitWith: splitWith.map(Number),
-      percents: splitType === "percent" ? percents : undefined,
-      date: new Date(date),
+      percents: splitType === "percent" ? activePercents : undefined,
+      date,
       category,
     });
+
+    setDescription("");
+    setAmount("");
+    setError("");
   }
 
   return (

@@ -33,7 +33,7 @@ export default function App() {
     return state.expenses.filter((e) => {
       if (q && !e.description.toLowerCase().includes(q)) return false;
       if (category !== "All" && e.category !== category) return false;
-      if (paidBy !== "" && e.paidBy !== paidBy) return false;
+      if (paidBy !== "" && Number(e.paidBy) !== Number(paidBy)) return false;
       return true;
     });
   }, [state.expenses, query, category, paidBy]);
@@ -72,7 +72,7 @@ export default function App() {
           <div className="eyebrow">FairShare</div>
           <h1>{state.groupName}</h1>
           <p className="subtitle">
-            Shared expenses for four friends. Numbers and labels should match
+            Shared expenses for {state.members.length} friends. Numbers and labels should match
             the spec in the README.
           </p>
         </div>
@@ -93,9 +93,9 @@ export default function App() {
           <ExpenseList
             expenses={filtered}
             members={state.members}
-            onDeleteAt={(index) => dispatch({ type: "DELETE_EXPENSE", index })}
-            onUpdateAt={(index, patch) =>
-              dispatch({ type: "UPDATE_EXPENSE", index, patch })
+            onDelete={(id) => dispatch({ type: "DELETE_EXPENSE", id })}
+            onUpdate={(id, patch) =>
+              dispatch({ type: "UPDATE_EXPENSE", id, patch })
             }
           />
         </div>
