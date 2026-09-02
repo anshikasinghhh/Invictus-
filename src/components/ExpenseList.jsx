@@ -55,6 +55,8 @@ function ExpenseRow({ expense, memberMap, onDelete, onSaveAmount }) {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.target.blur();
+              } else if (e.key === "Escape") {
+                setDraft(String(expense.amount));
               }
             }}
             aria-label={`Edit amount for ${expense.description}`}

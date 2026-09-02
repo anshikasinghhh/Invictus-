@@ -52,6 +52,10 @@ export default function SummaryCards({ members, expenses, onAddMember }) {
           e.preventDefault();
           const trimmed = name.trim();
           if (!trimmed) return;
+          if (members.some((m) => m.name.toLowerCase() === trimmed.toLowerCase())) {
+            alert("A member with this name already exists.");
+            return;
+          }
           onAddMember(trimmed);
           setName("");
         }}

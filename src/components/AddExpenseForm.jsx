@@ -79,6 +79,12 @@ export default function AddExpenseForm({ members, onAdd }) {
     setError("");
   }
 
+  const currentTotalPercent = useMemo(() => {
+    if (splitType !== "percent") return 100;
+    const sum = splitWith.reduce((acc, id) => acc + (Number(percents[id]) || 0), 0);
+    return Number(sum.toFixed(2));
+  }, [splitType, splitWith, percents]);
+
   return (
     <section className="card">
       <h2>Add expense</h2>
@@ -197,6 +203,22 @@ export default function AddExpenseForm({ members, onAdd }) {
                 />
               </div>
             ))}
+            <div
+              style={{
+                fontSize: "12px",
+                fontWeight: 600,
+                color:
+                  Math.abs(currentTotalPercent - 100) < 0.01
+                    ? "var(--good)"
+                    : "var(--bad)",
+                marginTop: 2,
+              }}
+            >
+              Total: {currentTotalPercent}%{" "}
+              {Math.abs(currentTotalPercent - 100) < 0.01
+                ? "✓"
+                : `(${Number((100 - currentTotalPercent).toFixed(2))}% remaining)`}
+            </div>
           </div>
         )}
 
