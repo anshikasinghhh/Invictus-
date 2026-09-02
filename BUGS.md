@@ -124,3 +124,24 @@ Keep this file in the repo and **commit it** with your fixes.
 
 **What I changed:** Updated `App.jsx` to dynamically render `Shared expenses for ${state.members.length} friends.`
 
+---
+
+## Bug 13
+
+**How to reproduce:** In the Summary card, enter the name of an existing member (e.g., "Carlos Mendes") into the "Add member" input and submit.
+
+**What is wrong:** The app allowed adding duplicate members with identical names, creating ambiguous payer selection and confusion in balances and settlements.
+
+**What I changed:** Added a duplicate name check in `SummaryCards.jsx` to prevent adding members with identical names (case-insensitive).
+
+---
+
+## Bug 14
+
+**How to reproduce:** Click the inline amount input on an expense row, type a modified number, and press the `Escape` key to cancel.
+
+**What is wrong:** The input did not handle the `Escape` key to cancel edits or revert to the original saved amount.
+
+**What I changed:** Added an `onKeyDown` handler for `Escape` in `ExpenseList.jsx` that reverts the input draft to `expense.amount`.
+
+
