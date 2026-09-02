@@ -113,3 +113,14 @@ Keep this file in the repo and **commit it** with your fixes.
 **What is wrong:** In `money.js`, `percentsSumTo100` used `reduce(...) === 100`, which failed for floating-point calculations like `100.00000000000001 !== 100`. Also, toggling members off left stale percentage entries in the `percents` state object, causing validation to sum percentages of deselected members.
 
 **What I changed:** Updated `percentsSumTo100` to allow floating-point tolerance (`Math.abs(sum - 100) < 0.001`), and updated `AddExpenseForm.jsx` to filter `percents` to only include currently active `splitWith` members.
+
+---
+
+## Bug 12
+
+**How to reproduce:** Add a new member to the group in the Summary card (e.g., adding a 5th or 6th member).
+
+**What is wrong:** The header subtitle hardcoded `"Shared expenses for four friends"`, failing to update dynamically as new members joined the group.
+
+**What I changed:** Updated `App.jsx` to dynamically render `Shared expenses for ${state.members.length} friends.`
+
